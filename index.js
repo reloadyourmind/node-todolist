@@ -21,8 +21,17 @@ app.get("/", (req, res) => {
     res.render("todo.ejs");
 });
 
-app.post('/', (req, res) => {
-    console.log(req.body);
+//POST METHOD
+app.post('/',async (req, res) => {
+    const todoTask = new TodoTask({
+    content: req.body.content
+    });
+    try {
+        await todoTask.save();
+        res.redirect("/");
+    } catch (err) {
+        res.redirect("/");
+    }
 });
 
 mongoose.set("useFindAndModify", false);

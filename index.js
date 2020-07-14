@@ -14,11 +14,21 @@ app.use(express.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
 
+//connection to db
+mongoose.set("useFindAndModify", false);
+mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {
+console.log("Connected to db!");
+app.listen(3000, () => console.log("Server Up and running"));
+});
 
 
 
+//GET METHOD
 app.get("/", (req, res) => {
-    res.render("todo.ejs");
+    TodoTask.find({}, (err, tasks) => {
+        res.render("todo.ejs", { todoTasks: tasks });
+    })
+    
 });
 
 //POST METHOD
@@ -33,11 +43,4 @@ app.post('/',async (req, res) => {
         res.redirect("/");
     }
 });
-
-mongoose.set("useFindAndModify", false);
-mongoose.connect(process.env.DB_CONNECT, {useNewUrlPassword: true}, () => {
-    console.log("Connected to DB");
-    app.listen(3000,() => console.log("Server is running!"));
-});
-
 

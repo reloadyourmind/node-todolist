@@ -59,6 +59,7 @@ app
     const id = req.params.id;
     TodoTask.findByIdAndUpdate(id, {content: req.body.content}, err => {
         if (err) return res.send(500, err);
+        res.redirect("/");
     });
 });
 
